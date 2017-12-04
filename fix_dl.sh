@@ -29,26 +29,15 @@ function SetFixDat {
 }
 
 function CheckDepend {
-  if [ -z "`which grep`" ]
-  then
-    echo -e "\033[31;1mError: failed to find grep. Install it.\033[0m"
-    exit
-  fi
-  if [ -z "`which mktemp`" ]
-  then
-    echo -e "\033[31;1mError: failed to find mktemp. Install it.\033[0m"
-    exit
-  fi
-  if [ -z "`which wget`" ]
-  then
-    echo -e "\033[31;1mError: failed to find wget. Install it.\033[0m"
-    exit
-  fi
-  if [ -z "`which sed`" ]
-  then
-    echo -e "\033[31;1mError: failed to find sed. Install it.\033[0m"
-    exit
-  fi
+  dependtool="grep mktemp wget sed mktemp"
+  for tool in $dependtool
+  do
+    if [ -z "`which $tool`" ]
+    then
+      echo -e "\033[31;1mError: failed to find $tool. Install it.\033[0m"
+      exit
+    fi
+  done
 }
 
 function SetDownloadPKG {
@@ -77,10 +66,10 @@ function CheckCompressPKG {
     trrntzip="`which trrntzip`"
   fi
 
-  if [ -z "$trrntzip" ]
+  if [[ -z "$trrntzip" || "`which zip`" = "" ]]
   then
     compresspkg=0
-    echo -e "\033[31;1mError: failed find trrntzip and compress option was ignore\033[0m"
+    echo -e "\033[31;1mError: failed find trrntzip or zip. Compress option was ignore\033[0m"
     return
   fi
 
@@ -134,10 +123,15 @@ fi
 
 CheckTSV
 
-if [ -n "$fixdat"]
+if [ ! -n "$fixdat" ]
 then
   echo "no fixdat, nothing scan"
   exit
+fi
+
+if [ "$compresspkg" -ne 0 ]
+then
+  CheckCompressPKG
 fi
 
 needlist=`mktemp`
@@ -186,11 +180,6 @@ then
 else
   echo "start download"
   wget -c -i "$urllist"
-fi
-
-if [ "$compresspkg" -ne 0 ]
-then
-  CheckCompressPKG
 fi
 
 if [ "$compresspkg" -ne 0 ]

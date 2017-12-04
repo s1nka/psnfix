@@ -4,6 +4,9 @@ Download PSN PKG from fixdat
 # depend
 linux, bash. wget, zip, grep, sed, mktemp, [trrntzip](https://sourceforge.net/projects/trrntzip/)
 
+# base
+please download [database](http://www.ps3hax.net/showthread.php?t=81538) and put in $HOME
+
 # usage
 ```
 ./fix_dl.sh -f <dat-file> -c -d -u
