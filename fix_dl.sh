@@ -5,6 +5,7 @@ database="$HOME/database"
 downloadpkg=0
 compresspkg=0
 udpatetsv=0
+getRAP=0
 fixdat=""
 trrntzip=""
 
@@ -15,6 +16,7 @@ function ShowHelp {
   echo "-d - download PKG-files (need wget)"
   echo "-c - compress to torrentzip (need trrntzip)"
   echo "-u - update TSV files"
+  echo "-r - get rap-files"
 }
 
 function SetFixDat {
@@ -94,6 +96,10 @@ function CheckTSV {
   fi
 }
 
+function SetRAP {
+  getRAP=1
+}
+
 echo fix-dat downloader by s1nka
 
 CheckDepend
@@ -111,6 +117,7 @@ do
     -d) SetDownloadPKG ;;
     -c) SetCompressPKG ;;
     -u) UdpateTSV ;;
+    -r) SetRAP ;;
      *) echo "$1 is not an option and ignore";;
   esac
   shift
@@ -159,6 +166,19 @@ else
 fi
 
 rm "$needlist"
+
+if [ "$getRAP" -ne 0 ]
+then
+  echo "get rap-files"
+  raplist=`mktemp`
+  grep -o "[0-9A-Za-z\_-.]*rap" "$fixdat" > $raplist
+  for rapfile in `cat $raplist`
+  do
+    raphex=`grep -o "$rapfile;[0-9A-Z]*;" "$database" | grep -Eo "[0-9A-Z]{32}"`
+    echo $raphex | xxd -r -p > "$rapfile"
+  done
+  rm "$raplist"
+fi
 
 if [ ! -s "$foolist" ]
 then
