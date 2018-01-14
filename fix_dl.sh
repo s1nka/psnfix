@@ -11,7 +11,7 @@ trrntzip=""
 
 function ShowHelp {
   echo "usage:"
-  echo "./fix_dl.sh -d <dat-file> -c -d -s"
+  echo "./fix_dl.sh -f <dat-file> -c -d -u -r"
   echo "-f - dat-name"
   echo "-d - download PKG-files (need wget)"
   echo "-c - compress to torrentzip (need trrntzip)"

@@ -9,11 +9,12 @@ please download [database](http://www.ps3hax.net/showthread.php?t=81538) and put
 
 # usage
 ```
-./fix_dl.sh -f <dat-file> -c -d -u
+./fix_dl.sh -f <dat-file> -c -d -u -r
 -f - dat-name
 -d - download PKG-files (need wget)
 -c - compress to torrentzip (need trrntzip)
 -u - update TSV files
+-r - get rap-files
 ```
 
 # example
