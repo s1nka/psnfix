@@ -34,7 +34,7 @@ function CheckDepend {
   dependtool="grep mktemp wget sed mktemp"
   for tool in $dependtool
   do
-    if [ -z "`which $tool`" ]
+    if [ -z "$(which "$tool")" ]
     then
       echo -e "\033[31;1mError: failed to find $tool. Install it.\033[0m"
       exit
@@ -63,12 +63,12 @@ function CheckCompressPKG {
     trrntzip="./trrntzip"
   fi
 
-  if [ "`which trrntzip`" != "" ]
+  if [ "$(which trrntzip)" != "" ]
   then
-    trrntzip="`which trrntzip`"
+    trrntzip="$(which trrntzip)"
   fi
 
-  if [[ -z "$trrntzip" || "`which zip`" = "" ]]
+  if [[ -z "$trrntzip" || "$(which zip)" = "" ]]
   then
     compresspkg=0
     echo -e "\033[31;1mError: failed find trrntzip or zip. Compress option was ignore\033[0m"
@@ -85,7 +85,7 @@ function SetUpdateTSV {
 function UdpateTSV {
   echo start update TSV-file
   mkdir -p "$tsvdir"
-  rm $tsvdir/*.tsv
+  rm "$tsvdir"/*.tsv
   curl https://nopaystation.com/ -s | grep ".tsv" | sed 's/\.tsv.*/\.tsv/' | sed 's/.*\"/https\:\/\/nopaystation\.com\//' | wget -q -i - -P "$tsvdir"
 }
 
@@ -104,7 +104,7 @@ echo fix-dat downloader by s1nka
 
 CheckDepend
 
-if [[ $# < 2 ]]
+if [[ $# -lt 2 ]]
 then
   ShowHelp
 fi
@@ -112,7 +112,7 @@ fi
 while [ -n "$1" ]
 do
   case "$1" in
-    -f) SetFixDat $2
+    -f) SetFixDat "$2"
         shift;;
     -d) SetDownloadPKG ;;
     -c) SetCompressPKG ;;
@@ -141,26 +141,26 @@ then
   CheckCompressPKG
 fi
 
-needlist=`mktemp`
-foolist=`mktemp`
-grep "rom name" "$fixdat" | grep -o "[0-9A-Za-z\_-]*\.pkg" > $needlist
+needlist=$(mktemp)
+foolist=$(mktemp)
+grep "rom name" "$fixdat" | grep -o "[0-9A-Za-z\_-]*\.pkg" > "$needlist"
 
 for TSVfile in $tsvdir*.tsv
 do
   echo "scan [$TSVfile]"
-  for URL in `cat $needlist`
+  while IFS= read -r URL
   do
-    grep $URL $TSVfile | grep -o "http.*" | sed 's/\.pkg.*/\.pkg/' >> "$foolist"
-  done
+    grep "$URL" "$TSVfile" | grep -o "http.*" | sed 's/\.pkg.*/\.pkg/' >> "$foolist"
+  done < "$needlist"
 done
 
 if [ -f "$database" ]
 then
-  echo "scan ["$database"]"
-  for URL in `cat $needlist`
+  echo "scan [$database]"
+  while IFS= read -r URL
   do
-    grep $URL "$database" | grep -o "http.*" | sed -e 's/\;.*//' >> "$foolist"
-  done
+    grep "$URL" "$database" | grep -o "http.*" | sed -e 's/\;.*//' >> "$foolist"
+  done < "$needlist"
 else
   echo "please download 'database' from http://www.ps3hax.net/showthread.php?t=81538"
 fi
@@ -170,13 +170,13 @@ rm "$needlist"
 if [ "$getRAP" -ne 0 ]
 then
   echo "get rap-files"
-  raplist=`mktemp`
-  grep -o "[0-9A-Za-z\_-.]*rap" "$fixdat" > $raplist
-  for rapfile in `cat $raplist`
+  raplist=$(mktemp)
+  grep -o "[0-9A-Za-z\_.-]*rap" "$fixdat" > "$raplist"
+  while IFS= read -r rapfile
   do
-    raphex=`grep -o "$rapfile;[0-9A-Z]*;" "$database" | grep -Eo "[0-9A-Z]{32}"`
-    echo $raphex | xxd -r -p > "$rapfile"
-  done
+    raphex=$(grep -o "$rapfile;[0-9A-Z]*;" "$database" | grep -Eo "[0-9A-Z]{32}")
+    echo "$raphex" | xxd -r -p > "$rapfile"
+  done < "$raplist"
   rm "$raplist"
 fi
 
@@ -187,9 +187,9 @@ then
   exit
 fi
 
-urllist=`mktemp`
+urllist=$(mktemp)
 
-cat "$foolist" | sort -u > "$urllist"
+sort -u > "$urllist" < "$foolist"
 
 rm "$foolist"
 
@@ -211,7 +211,7 @@ then
     $trrntzip "$FILE.zip"
     rm "$FILE"
   done
-  rm *.log
+  rm -- *.log
 fi
 
 rm "$urllist"
