@@ -169,15 +169,20 @@ rm "$needlist"
 
 if [ "$getRAP" -ne 0 ]
 then
-  echo "get rap-files"
-  raplist=$(mktemp)
-  grep -o "[0-9A-Za-z\_.-]*rap" "$fixdat" > "$raplist"
-  while IFS= read -r rapfile
-  do
-    raphex=$(grep -o "$rapfile;[0-9A-Z]*;" "$database" | grep -Eo "[0-9A-Z]{32}")
-    echo "$raphex" | xxd -r -p > "$rapfile"
-  done < "$raplist"
-  rm "$raplist"
+  if [ -z "$(which xxd)" ]
+  then
+    echo -e "\033[31;1mError: failed to find xxd. Can't extract rap-files. Install it.\033[0m"
+  else
+    echo "get rap-files"
+    raplist=$(mktemp)
+    grep -o "[0-9A-Za-z\_.-]*rap" "$fixdat" > "$raplist"
+    while IFS= read -r rapfile
+    do
+      raphex=$(grep -o "$rapfile;[0-9A-Z]*;" "$database" | grep -Eo "[0-9A-Z]{32}")
+      echo "$raphex" | xxd -r -p > "$rapfile"
+    done < "$raplist"
+    rm "$raplist"
+  fi
 fi
 
 if [ ! -s "$foolist" ]
