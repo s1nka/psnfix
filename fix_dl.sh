@@ -86,7 +86,7 @@ function UdpateTSV {
   echo start update TSV-file
   mkdir -p "$tsvdir"
   rm "$tsvdir"/*.tsv
-  curl https://nopaystation.com/ -s | grep ".tsv" | sed 's/\.tsv.*/\.tsv/' | sed 's/.*\"/https\:\/\/nopaystation\.com\//' | wget -q -i - -P "$tsvdir"
+  wget https://nopaystation.com/tsv/ -q -O- | grep "\.tsv" | sed 's/\.tsv.*/\.tsv/' | sed 's/.*\"/https\:\/\/nopaystation\.com\/tsp\//' | wget -q -i - -P "$tsvdir"
 }
 
 function CheckTSV {
