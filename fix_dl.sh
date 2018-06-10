@@ -15,8 +15,8 @@ function ShowHelp {
   echo "-f - dat-name"
   echo "-d - download PKG-files (need wget)"
   echo "-c - compress to torrentzip (need trrntzip)"
-  echo "-u - update TSV files"
-  echo "-r - get rap-files"
+  echo "-u - update TSV files (need wget)"
+  echo "-r - get rap-files (need xxd)"
 }
 
 function SetFixDat {

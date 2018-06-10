@@ -13,8 +13,8 @@ please download [database](http://www.ps3hax.net/showthread.php?t=81538) and put
 -f - dat-name
 -d - download PKG-files (need wget)
 -c - compress to torrentzip (need trrntzip)
--u - update TSV files
--r - get rap-files
+-u - update TSV files (need wget)
+-r - get rap-files (need xxd)
 ```
 
 # example
