@@ -86,7 +86,7 @@ function UdpateTSV {
   echo start update TSV-file
   mkdir -p "$tsvdir"
   rm "$tsvdir"/*.tsv
-  wget https://nopaystation.com/tsv/ -q -O- | grep "\.tsv" | sed 's/\.tsv.*/\.tsv/' | sed 's/.*\"/https\:\/\/nopaystation\.com\/tsv\//' | wget -q -i - -P "$tsvdir"
+  wget http://nopaystation.com/ -q -O- | grep -o "/[0-9A-Z_]*\.tsv" | sed -e 's/\//http\:\/\/nopaystation\.com\/tsv\//' | wget -q -i- -P "$tsvdir"
 }
 
 function CheckTSV {
@@ -143,7 +143,7 @@ fi
 
 needlist=$(mktemp)
 foolist=$(mktemp)
-grep "rom name" "$fixdat" | grep -o "[0-9A-Za-z\_-]*\.pkg" > "$needlist"
+grep "rom.*name" "$fixdat" | grep -o "[0-9A-Za-z\_-]*\.pkg" > "$needlist"
 
 for TSVfile in $tsvdir*.tsv
 do
