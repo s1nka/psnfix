@@ -4,7 +4,7 @@ tsvdir="$HOME/tsv/"
 database="$HOME/database"
 downloadpkg=0
 compresspkg=0
-udpatetsv=0
+updatetsv=0
 getRAP=0
 fixdat=""
 trrntzip=""
@@ -79,10 +79,10 @@ function CheckCompressPKG {
 }
 
 function SetUpdateTSV {
-  udpatetsv=1
+  updatetsv=1
 }
 
-function UdpateTSV {
+function UpdateTSV {
   echo start update TSV-file
   mkdir -p "$tsvdir"
   rm "$tsvdir"/*.tsv
@@ -92,7 +92,7 @@ function UdpateTSV {
 function CheckTSV {
   if [ ! -d "$tsvdir" ]
   then
-    UdpateTSV
+    UpdateTSV
   fi
 }
 
@@ -116,16 +116,16 @@ do
         shift;;
     -d) SetDownloadPKG ;;
     -c) SetCompressPKG ;;
-    -u) UdpateTSV ;;
+    -u) UpdateTSV ;;
     -r) SetRAP ;;
      *) echo "$1 is not an option and ignore";;
   esac
   shift
 done
 
-if [ "$udpatetsv" -ne 0 ]
+if [ "$updatetsv" -ne 0 ]
 then
-  UdpateTSV
+  UpdateTSV
 fi
 
 CheckTSV
