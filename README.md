@@ -5,7 +5,7 @@ Download PSN PKG from fixdat
 linux, bash, wget, zip, grep, sed, mktemp, xxd, [trrntzip](https://sourceforge.net/projects/trrntzip/)
 
 # base
-please download [database](http://www.ps3hax.net/showthread.php?t=81538) and put in $HOME
+please download [database](https://psndl.net/download-db) and put in $HOME
 
 # usage
 ```
@@ -13,7 +13,7 @@ please download [database](http://www.ps3hax.net/showthread.php?t=81538) and put
 -f - dat-name
 -d - download PKG-files (need wget)
 -c - compress to torrentzip (need trrntzip)
--u - update TSV files (need wget)
+-u - update TSV and database files (need wget)
 -r - get rap-files (need xxd)
 ```
 
@@ -33,7 +33,7 @@ download and compress pkgs:
 ./fix_dl.sh -f "fix_Sony - PlayStation Portable (PSN) (Encrypted) (20171202-061552).dat" -d -c
 ```
 
-update nopaystation base(install in ~/tsv/):
+update nopaystation base(install in ~/tsv/) and database from psndl.net(install in ~/):
 ```
 ./fix_dl.sh -u
 ```
