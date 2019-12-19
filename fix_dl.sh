@@ -83,10 +83,11 @@ function SetUpdateTSV {
 }
 
 function UpdateTSV {
-  echo start update TSV-file
+  echo start update TSV-file and database-file
   mkdir -p "$tsvdir"
   rm "$tsvdir"/*.tsv
   wget http://nopaystation.com/ -q -O- | grep -o "/[0-9A-Z_]*\.tsv" | sed -e 's/\//http\:\/\/nopaystation\.com\/tsv\//' | wget -q -i- -P "$tsvdir"
+  wget -q --post-data "" https://psndl.net/download-db -O "$database"
 }
 
 function CheckTSV {
@@ -162,7 +163,7 @@ then
     grep "$URL" "$database" | grep -o "http.*" | sed -e 's/\;.*//' >> "$foolist"
   done < "$needlist"
 else
-  echo "please download 'database' from http://www.ps3hax.net/showthread.php?t=81538"
+  echo "please download 'database' from https://psndl.net/download-db and plase in $database"
 fi
 
 rm "$needlist"
