@@ -180,7 +180,10 @@ then
     while IFS= read -r rapfile
     do
       raphex=$(grep -o "$rapfile;[0-9A-Z]*;" "$database" | grep -Eo "[0-9A-Z]{32}")
-      echo "$raphex" | xxd -r -p > "$rapfile"
+      if [ -n "$raphex" ]
+      then
+        echo "$raphex" | xxd -r -p > "$rapfile"
+      fi
     done < "$raplist"
     rm "$raplist"
   fi
