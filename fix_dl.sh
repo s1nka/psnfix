@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tsvdir="$HOME/tsv/"
-database="$HOME/database"
+database="$HOME/db.csv"
 downloadpkg=0
 compresspkg=0
 updatetsv=0
@@ -87,7 +87,8 @@ function UpdateTSV {
   mkdir -p "$tsvdir"
   rm "$tsvdir"/*.tsv
   wget http://nopaystation.com/ -q -O- | grep -o "/[0-9A-Z_]*\.tsv" | sed -e 's/\//http\:\/\/nopaystation\.com\/tsv\//' | wget -q -i- -P "$tsvdir"
-  wget -q --post-data "" https://psndl.net/download-db -O "$database"
+#   No longer downloading db
+#   wget -q --post-data "" https://psndl.net/download-db -O "$database"
 }
 
 function CheckTSV {
@@ -163,7 +164,7 @@ then
     grep "$URL" "$database" | grep -o "http.*" | sed -e 's/\;.*//' >> "$foolist"
   done < "$needlist"
 else
-  echo "please download 'database' from https://psndl.net/download-db and plase in $database"
+  echo "please download 'database' from https://psndl.net/packages/database and place in $database"
 fi
 
 rm "$needlist"
