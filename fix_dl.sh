@@ -85,7 +85,7 @@ function SetUpdateTSV {
 function UpdateTSV {
   echo start update TSV-file and database-file
   mkdir -p "$tsvdir"
-  rm "$tsvdir"/*.tsv
+  rm "$tsvdir"*.tsv
   wget http://nopaystation.com/ -q -O- | grep -o "/[0-9A-Z_]*\.tsv" | sed -e 's/\//http\:\/\/nopaystation\.com\/tsv\//' | wget -q -i- -P "$tsvdir"
 #   No longer downloading db
 #   wget -q --post-data "" https://psndl.net/download-db -O "$database"
